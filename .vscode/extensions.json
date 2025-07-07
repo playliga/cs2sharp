@@ -1,0 +1,4 @@
+{
+  "recommendations": ["editorconfig.editorconfig", "ms-dotnettools.csdevkit"],
+  "unwantedRecommendations": []
+}

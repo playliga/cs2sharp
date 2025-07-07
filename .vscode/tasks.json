@@ -1,0 +1,44 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "command": "dotnet build -c release",
+      "group": "build",
+      "label": "build",
+      "presentation": {
+        "reveal": "always"
+      },
+      "problemMatcher": [],
+      "type": "shell"
+    },
+    {
+      "command": "cp -r bin/Release/net8.0/LigaEsportsManager.* generated/addons/counterstrikesharp/plugins/LigaEsportsManager/",
+      "dependsOn": "build",
+      "label": "stage",
+      "presentation": {
+        "reveal": "always"
+      },
+      "problemMatcher": [],
+      "type": "shell"
+    },
+    {
+      "command": "cp -r generated/* \"$APPDATA/LIGA Esports Manager/plugins/cs2/\"",
+      "dependsOn": "stage",
+      "label": "apply",
+      "presentation": {
+        "reveal": "always"
+      },
+      "problemMatcher": [],
+      "type": "shell"
+    },
+    {
+      "dependsOn": ["build", "stage", "apply"],
+      "dependsOrder": "sequence",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "label": "all"
+    }
+  ]
+}

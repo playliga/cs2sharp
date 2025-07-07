@@ -1,0 +1,90 @@
+name: Publish
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  download:
+    runs-on: ubuntu-latest
+    env:
+      CSSHARP_REPO: roflmuffin/CounterStrikeSharp
+      CSSHARP_VERSION: v1.0.320
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      METAMOD_DOWNLOAD_URL: https://mms.alliedmods.net/mmsdrop/2.0/mmsource-2.0.0-git1359-windows.zip
+    outputs:
+      PROJECT_NAME: ${{ steps.project_name.outputs.PROJECT_NAME }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: >
+          curl ${{ env.METAMOD_DOWNLOAD_URL }}
+          --create-dirs
+          --output downloads/$(basename ${{ env.METAMOD_DOWNLOAD_URL }})
+          --show-error
+          --silent
+      - run: >
+          gh release download ${{ env.CSSHARP_VERSION }}
+          --dir downloads
+          --pattern 'counterstrikesharp-with-runtime-windows-*.zip'
+          --repo ${{ env.CSSHARP_REPO }}
+      - run: mkdir generated
+      - run: >
+          for zip in $(ls downloads/*.zip); do
+            unzip -qq $zip -d generated
+          done
+      - id: project_name
+        run: echo "PROJECT_NAME=$(basename "$(find . -maxdepth 1 -name '*.sln' | head -n 1)" .sln)" >> $GITHUB_OUTPUT
+      - uses: actions/upload-artifact@v4
+        with:
+          name: generated
+          path: generated/*
+  build:
+    needs: download
+    runs-on: windows-latest
+    outputs:
+      PROJECT_NAME: ${{ steps.project_name.outputs.PROJECT_NAME }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: generated
+          path: generated
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+      - id: project_name
+        run: echo "PROJECT_NAME=${{ needs.download.outputs.PROJECT_NAME }}" >> $env:GITHUB_OUTPUT
+      - run: dotnet restore
+      - run: dotnet build -c Release
+      - run: mkdir generated/addons/counterstrikesharp/plugins/${{ needs.download.outputs.PROJECT_NAME }}
+      - run: >
+          cp -Recurse -Force
+          bin/Release/net8.0/${{ needs.download.outputs.PROJECT_NAME }}.*
+          generated/addons/counterstrikesharp/plugins/${{ needs.download.outputs.PROJECT_NAME }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: generated
+          path: generated/*
+          overwrite: true
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: generated
+          path: generated
+      - run: echo "REPO_NAME=$(basename ${{ github.repository }})" >> $GITHUB_ENV
+      - run: echo "VERSION=$(grep 'ModuleVersion' ${{ needs.build.outputs.PROJECT_NAME }}.cs | sed -E 's/.*"([^"]+)".*/\1/')" >> $GITHUB_ENV
+      - run: mkdir $REPO_NAME && mv generated/* $REPO_NAME/
+      - run: zip -rq $REPO_NAME-$VERSION.zip $REPO_NAME/
+      - id: create_release
+        run: gh release create $VERSION --title "$VERSION"
+      - if: success() && steps.create_release.outcome == 'success'
+        run: gh release upload $VERSION $REPO_NAME-*.zip --clobber
