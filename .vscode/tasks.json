@@ -4,7 +4,17 @@
     {
       "command": "dotnet build -c release",
       "group": "build",
-      "label": "build",
+      "label": "build:src",
+      "presentation": {
+        "reveal": "always"
+      },
+      "problemMatcher": [],
+      "type": "shell"
+    },
+    {
+      "command": "mkdir -p generated/addons/counterstrikesharp/plugins/LigaEsportsManager/",
+      "dependsOn": "build:src",
+      "label": "stage:tree",
       "presentation": {
         "reveal": "always"
       },
@@ -13,8 +23,8 @@
     },
     {
       "command": "cp -r bin/Release/net8.0/LigaEsportsManager.* generated/addons/counterstrikesharp/plugins/LigaEsportsManager/",
-      "dependsOn": "build",
-      "label": "stage",
+      "dependsOn": "stage:tree",
+      "label": "stage:files",
       "presentation": {
         "reveal": "always"
       },
@@ -23,8 +33,8 @@
     },
     {
       "command": "cp -r generated/* \"$APPDATA/LIGA Esports Manager/plugins/cs2/\"",
-      "dependsOn": "stage",
-      "label": "apply",
+      "dependsOn": "stage:files",
+      "label": "stage:apply",
       "presentation": {
         "reveal": "always"
       },
@@ -32,7 +42,7 @@
       "type": "shell"
     },
     {
-      "dependsOn": ["build", "stage", "apply"],
+      "dependsOn": ["build:src", "stage:tree", "stage:files", "stage:apply"],
       "dependsOrder": "sequence",
       "group": {
         "kind": "build",

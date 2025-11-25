@@ -9,8 +9,8 @@
 
 # APIs and Technologies
 
-- [CounterStrikeSharp](https://docs.cssharp.dev/) `v1.0.320`
-- [Metamod Source](https://www.sourcemm.net/) `v2.0.0-git1359`
+- [CounterStrikeSharp](https://docs.cssharp.dev/) `v1.0.347`
+- [Metamod Source](https://www.sourcemm.net/) `v2.0.0-git1374`
 - [Visual Studio Redistributables](https://aka.ms/vs/17/release/vc_redist.x64.exe)
 - [.NET 8.0](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 
@@ -23,6 +23,7 @@
 # Getting Started
 
 ```bash
+dotnet nuget add source -n nuget.org https://api.nuget.org/v3/index.json
 dotnet restore
 dotnet build -c release
 ```

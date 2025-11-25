@@ -38,7 +38,7 @@ public class LigaEsportsManagerPlugin : BasePlugin
     public override string ModuleName => "LIGA Esports Manager";
 
     /// <inheritdoc/>
-    public override string ModuleVersion => "1.0.0";
+    public override string ModuleVersion => "1.0.1";
 
     /// <summary>
     /// Delay (in seconds) before the server shuts down after a game ends.
