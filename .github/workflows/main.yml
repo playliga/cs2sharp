@@ -12,9 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CSSHARP_REPO: roflmuffin/CounterStrikeSharp
-      CSSHARP_VERSION: v1.0.358
+      CSSHARP_VERSION: v1.0.366
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      METAMOD_DOWNLOAD_URL: https://mms.alliedmods.net/mmsdrop/2.0/mmsource-2.0.0-git1383-windows.zip
+      METAMOD_DOWNLOAD_URL: https://github.com/alliedmodders/metamod-source/releases/download/2.0.0.1396/mmsource-2.0.0-git1396-windows.zip
     outputs:
       PROJECT_NAME: ${{ steps.project_name.outputs.PROJECT_NAME }}
     steps:
@@ -22,6 +22,7 @@ jobs:
       - run: >
           curl ${{ env.METAMOD_DOWNLOAD_URL }}
           --create-dirs
+          --location
           --output downloads/$(basename ${{ env.METAMOD_DOWNLOAD_URL }})
           --show-error
           --silent
