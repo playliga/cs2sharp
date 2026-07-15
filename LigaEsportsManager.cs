@@ -1,4 +1,4 @@
-﻿using CounterStrikeSharp.API;
+using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Modules.Commands;
@@ -38,7 +38,7 @@ public class LigaEsportsManagerPlugin : BasePlugin
     public override string ModuleName => "LIGA Esports Manager";
 
     /// <inheritdoc/>
-    public override string ModuleVersion => "1.0.3";
+    public override string ModuleVersion => "1.0.4";
 
     /// <summary>
     /// Delay (in seconds) before the server shuts down after a game ends.

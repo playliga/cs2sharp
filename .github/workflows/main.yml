@@ -12,9 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CSSHARP_REPO: roflmuffin/CounterStrikeSharp
-      CSSHARP_VERSION: v1.0.366
+      CSSHARP_VERSION: v1.0.371
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      METAMOD_DOWNLOAD_URL: https://github.com/alliedmodders/metamod-source/releases/download/2.0.0.1396/mmsource-2.0.0-git1396-windows.zip
+      METAMOD_DOWNLOAD_URL: https://github.com/alliedmodders/metamod-source/releases/download/2.0.0.1406/mmsource-2.0.0-git1406-windows.zip
     outputs:
       PROJECT_NAME: ${{ steps.project_name.outputs.PROJECT_NAME }}
     steps:
@@ -55,7 +55,7 @@ jobs:
           path: generated
       - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: "8.0.x"
+          dotnet-version: "10.0.x"
       - id: project_name
         run: echo "PROJECT_NAME=${{ needs.download.outputs.PROJECT_NAME }}" >> $env:GITHUB_OUTPUT
       - run: dotnet restore
