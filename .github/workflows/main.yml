@@ -63,7 +63,7 @@ jobs:
       - run: mkdir generated/addons/counterstrikesharp/plugins/${{ needs.download.outputs.PROJECT_NAME }}
       - run: >
           cp -Recurse -Force
-          bin/Release/net8.0/${{ needs.download.outputs.PROJECT_NAME }}.*
+          bin/Release/net10.0/${{ needs.download.outputs.PROJECT_NAME }}.*
           generated/addons/counterstrikesharp/plugins/${{ needs.download.outputs.PROJECT_NAME }}
       - uses: actions/upload-artifact@v4
         with:
