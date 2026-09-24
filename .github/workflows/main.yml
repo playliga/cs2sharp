@@ -12,9 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CSSHARP_REPO: roflmuffin/CounterStrikeSharp
-      CSSHARP_VERSION: v1.0.374
+      CSSHARP_VERSION: v1.0.375
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      METAMOD_DOWNLOAD_URL: https://github.com/alliedmodders/metamod-source/releases/download/2.0.0.1411/mmsource-2.0.0-git1411-windows.zip
+      METAMOD_DOWNLOAD_URL: https://github.com/alliedmodders/metamod-source/releases/download/2.0.0.1469/mmsource-2.0.0-git1469-windows.zip
     outputs:
       PROJECT_NAME: ${{ steps.project_name.outputs.PROJECT_NAME }}
     steps:
